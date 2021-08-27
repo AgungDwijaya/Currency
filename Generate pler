@@ -1,0 +1,413 @@
+//get contacts
+get_contactsdetail = zoho.crm.getRecordById("Contacts",id.tolong());
+Account_Name = get_contactsdetail.get("Account_Name");
+Assessor = get_contactsdetail.get("Assessor");
+Assessor_s_Initial = get_contactsdetail.get("Assessor_s_Initial");
+Assesor_Email = get_contactsdetail.get("Assesor_Email");
+Address = get_contactsdetail.get("Address");
+Adjustment = get_contactsdetail.get("Adjustment");
+AssesmentDate = get_contactsdetail.get("Assesment_Date_Time");
+Dates = AssesmentDate.toString("MMM dd, yyyy");
+info Dates;
+Created_By = get_contactsdetail.get("Created_By");
+Description = get_contactsdetail.get("Description");
+Email = get_contactsdetail.get("Email");
+First_Name = get_contactsdetail.get("First_Name");
+Lead_Source = get_contactsdetail.get("Lead_Source");
+Record_Image = get_contactsdetail.get("Record_Image");
+Owner = get_contactsdetail.get("Owner");
+Last_Name = get_contactsdetail.get("Last_Name");
+City = get_contactsdetail.get("City");
+Street = get_contactsdetail.get("Street");
+State = get_contactsdetail.get("State");
+Mobile = get_contactsdetail.get("Mobile");
+Modified_By = get_contactsdetail.get("Modified_By");
+Phone = get_contactsdetail.get("Phone");
+Region = get_contactsdetail.get("Region");
+Vendor_Name = get_contactsdetail.get("Vendor_Name");
+State = get_contactsdetail.get("State");
+Job_Category = get_contactsdetail.get("Job_Category");
+RSJ170_Price = get_contactsdetail.get("RSJ170_Price");
+RSJ170_Qty = get_contactsdetail.get("RSJ170_Qty");
+Travel = get_contactsdetail.get("Travel");
+Tax = get_contactsdetail.get("Tax");
+Service_Location_Cost = get_contactsdetail.get("Service_Location_Cost");
+//get related list
+listpro = list();
+subform = list();
+get_relatedlist = zoho.crm.getRelatedRecords("Quotes","Contacts",id.tolong());
+for each  quote in get_relatedlist
+{
+	quoteID = quote.get("id");
+	quoteDetails = zoho.crm.getRecordById("Quotes",quoteID);
+	//info quoteDetails;
+	Additional_Price = quoteDetails.get("Additional_Price");
+	Additional_kg = quoteDetails.get("Additional_kg");
+	Situation_of_Works = quoteDetails.get("Situation_of_Works");
+	Type_of_Foundation = quoteDetails.get("Type_of_Foundation");
+	Stabilising_Relevelling = quoteDetails.get("Stabilising_Relevelling");
+	Geotechnical_Note = quoteDetails.get("Geotechnical_Note");
+	Service_Location = quoteDetails.get("Service_Location");
+	Lineal_Area = quoteDetails.get("Lineal_Area");
+	Site_Description = quoteDetails.get("Site_Description");
+	Basis_of_Submission = quoteDetails.get("Basis_of_Submission");
+	Type_of_Injection = quoteDetails.get("Type_of_Injection");
+	Subsidence_Evident = quoteDetails.get("Subsidence_Evident");
+	Quote_No = quoteDetails.get("Quote_No");
+	Quote_Date = quoteDetails.get("Quote_Date");
+	quoteDates = Quote_Date.toString("MMM dd, yyyy");
+	Discount = quoteDetails.get("Discount");
+	Additional_Price = quoteDetails.get("Additional_Price");
+	Additional_kg = quoteDetails.get("Additional_kg");
+	QBCC_Insurance = quoteDetails.get("QBCC_Insurance");
+	Days = quoteDetails.get("Days");
+	//===============================================================================================================
+	budgetfrom = quoteDetails.get("Budget_From");
+	b = budgetfrom.toDecimal().round(2);
+	bb = b.toString().length();
+	bbb = b.toString().substring(bb - 3,bb);
+	budgetfroms = budgetfrom.floor();
+	budgetfromlength = budgetfroms.toString().length();
+	if(budgetfrom >= 1000)
+	{
+		separatorfrom = budgetfroms.toString().substring(budgetfromlength - 3,budgetfromlength);
+		budgetfrom1 = budgetfroms.toString().substring(0,budgetfromlength - 3).replaceAll("(?<=\d)(?=(\d\d\d)+(?!\d))",",") + "," + separatorfrom + bbb;
+	}
+	else
+	{
+		budgetfrom1 = budgetfroms.toString() + bbb;
+	}
+	info budgetfrom1;
+	//===============================================================================================================
+	budgetto = quoteDetails.get("Budget_To");
+	a = budgetto.toDecimal().round(2);
+	aa = a.toString().length();
+	aaa = a.toString().substring(aa - 3,aa);
+	budgettot = budgetto.floor();
+	budgettolength = budgettot.toString().length();
+	if(budgettot >= 1000)
+	{
+		separatorto = budgettot.toString().substring(budgettolength - 3,budgettolength);
+		budgetto1 = budgettot.toString().substring(0,budgettolength - 3).replaceAll("(?<=\d)(?=(\d\d\d)+(?!\d))",",") + "," + separatorto + aaa;
+	}
+	else
+	{
+		budgetto1 = budgettot.toString() + aaa;
+	}
+	info budgetto1;
+	//===============================================================================================================
+	aggadjust = quoteDetails.get("Adjustment");
+	aggdisc = quoteDetails.get("Discount");
+	//===============================================================================================================
+	//product details
+	//get product details
+	Product_Details = quoteDetails.get("Product_Details");
+	//info Product_Details.size();
+	for each  products in Product_Details
+	{
+		//productname = products.get("product").get("name");
+		product = products.get("product");
+		//if 
+		prodname = products.get("product").get("name");
+		//info prodname;
+		//===============================================================================================================
+		if(prodname = "RSJ170 - Resinject Product")
+		{
+			RSJ170_Price = products.get("net_total");
+			price1 = products.get("list_price");
+			RSJ170_Qty = products.get("quantity");
+			f = RSJ170_Price.toDecimal().round(2);
+			ff = f.toString().length();
+			fff = f.toString().substring(ff - 3,ff);
+			RSJ170_Prices = RSJ170_Price.floor();
+			RSJ170_Priceslength = RSJ170_Prices.toString().length();
+			if(RSJ170_Price >= 1000)
+			{
+				separatorRSJ170 = RSJ170_Prices.toString().substring(RSJ170_Priceslength - 3,RSJ170_Priceslength);
+				Currency1 = RSJ170_Prices.toString().substring(0,RSJ170_Priceslength - 3).replaceAll("(?<=\d)(?=(\d\d\d)+(?!\d))",",") + "," + separatorRSJ170 + fff;
+			}
+			else
+			{
+				Currency1 = RSJ170_Prices.toString() + fff;
+			}
+			info Currency1;
+		}
+		//===============================================================================================================
+		else if(prodname = "Travel & Establishment")
+		{
+			Travel_Establishment_Price = products.get("net_total");
+			price2 = products.get("list_price");
+			qty2 = products.get("quantity");
+			g = Travel_Establishment_Price.toDecimal().round(2);
+			gg = g.toString().length();
+			ggg = g.toString().substring(gg - 3,gg);
+			Travel_Establishment_Prices = Travel_Establishment_Price.floor();
+			Travel_Establishment_Pricelength = Travel_Establishment_Prices.toString().length();
+			if(Travel_Establishment_Price >= 1000)
+			{
+				separatorTravel = Travel_Establishment_Prices.toString().substring(Travel_Establishment_Pricelength - 3,Travel_Establishment_Pricelength);
+				Currency2 = Travel_Establishment_Prices.toString().substring(0,Travel_Establishment_Pricelength - 3).replaceAll("(?<=\d)(?=(\d\d\d)+(?!\d))",",") + "," + separatorTravel + ggg;
+			}
+			else
+			{
+				Currency2 = Travel_Establishment_Prices.toString() + ggg;
+			}
+			info Currency2;
+		}
+		else if(prodname = "Service Location")
+		{
+			serviceloc = products.get("net_total");
+			price3 = products.get("list_price");
+			qty3 = products.get("quantity");
+			h = serviceloc.toDecimal().round(2);
+			hh = h.toString().length();
+			hhh = h.toString().substring(hh - 3,hh);
+			servicelocs = serviceloc.floor();
+			serviceloclength = servicelocs.toString().length();
+			if(serviceloc >= 1000)
+			{
+				separatorService = servicelocs.toString().substring(serviceloclength - 3,serviceloclength);
+				Currency3 = servicelocs.toString().substring(0,serviceloclength - 3).replaceAll("(?<=\d)(?=(\d\d\d)+(?!\d))",",") + "," + separatorService + hhh;
+			}
+			else
+			{
+				Currency3 = servicelocs.toString() + hhh;
+			}
+			info Currency3;
+		}
+		else if(prodname = "Additional Product")
+		{
+			additional = products.get("net_total");
+			addtax = additional * 0.1;
+			qty4 = products.get("quantity");
+			i = additional.toDecimal().round(2);
+			ii = i.toString().length();
+			iii = i.toString().substring(ii - 3,ii);
+			additionals = additional.floor();
+			additionallength = additionals.toString().length();
+			if(additional >= 1000)
+			{
+				separatorAdditional = additionals.toString().substring(additionallength - 3,additionallength);
+				Currency4 = additionals.toString().substring(0,additionallength - 3).replaceAll("(?<=\d)(?=(\d\d\d)+(?!\d))",",") + "," + separatorAdditional + iii;
+			}
+			else
+			{
+				Currency4 = additionals.toString() + iii;
+			}
+			info Currency4;
+			//additional product price
+			price4 = products.get("list_price");
+			p4 = price4.toDecimal().round(2);
+			p44 = p4.toString().length();
+			p444 = p4.toString().substring(p44 - 3,p44);
+			price4s = price4.floor();
+			price4slength = price4s.toString().length();
+			if(price4 >= 1000)
+			{
+				separatorPrice44 = price4s.toString().substring(price4slength - 3,price4slength);
+				price44 = price4s.toString().substring(0,price4slength - 3).replaceAll("(?<=\d)(?=(\d\d\d)+(?!\d))",",") + "," + separatorPrice44 + p444;
+			}
+			else
+			{
+				price44 = price4s.toString() + p444;
+			}
+			//additional product with GST
+			addGST = additional + addtax;
+			info "AddGST: " + addGST;
+			add4 = addGST.toDecimal().round(2);
+			info "add4: " + add4;
+			add44 = add4.toString().length();
+			info "add4lengh: " + add44;
+			add444 = add4.toString().substring(add44 - 3,add44);
+			info "add444:" + add444;
+			add4s = addGST.floor();
+			info "add4s" + add4s;
+			add4slength = add4s.toString().length();
+			info "add4slength: " + add4slength;
+			if(addGST >= 1000)
+			{
+				separatorAdd44 = add4s.toString().substring(add4slength - 3,add4slength);
+				addPrice = add4s.toString().substring(0,add4slength - 3).replaceAll("(?<=\d)(?=(\d\d\d)+(?!\d))",",") + "," + separatorAdd44 + add444;
+				info "1: " + addPrice;
+			}
+			else
+			{
+				addPrice = add4s.toString() + add444;
+				info "2: " + addPrice;
+			}
+		}
+		else if(prodname = "QBCC Insurance")
+		{
+			qbcc = products.get("net_total");
+			price5 = products.get("list_price");
+			qty5 = products.get("quantity");
+			j = qbcc.toDecimal().round(2);
+			jj = j.toString().length();
+			jjj = j.toString().substring(jj - 3,jj);
+			qbccs = qbcc.floor();
+			qbcclength = qbccs.toString().length();
+			if(qbcc >= 1000)
+			{
+				separatorQbcc = qbccs.toString().substring(qbcclength - 3,qbcclength);
+				Currency5 = qbccs.toString().substring(0,qbcclength - 3).replaceAll("(?<=\d)(?=(\d\d\d)+(?!\d))",",") + "," + separatorQbcc + jjj;
+			}
+			else
+			{
+				Currency5 = qbccs.toString() + jjj;
+			}
+			info Currency5;
+		}
+		else
+		{
+			info "Please input the product correctly!";
+		}
+		//get products;
+		qty = products.get("quantity");
+		lp = products.get("list_price");
+		dsc = products.get("Discount");
+		amount = products.get("total");
+		total = products.get("net_total");
+		taxy = products.get("Tax");
+		//map
+		mapping = Map();
+		mapping.put("Product_Name",product);
+		mapping.put("Quantity",qty);
+		mapping.put("List_Price",lp);
+		mapping.put("Discount",dsc);
+		mapping.put("Amount",amount);
+		mapping.put("Total",total);
+		mapping.put("Tax",taxy);
+		listpro.add(mapping);
+		//subform
+		mapsub = Map();
+		mapsub.put("Product_Details.Amount",amount);
+		mapsub.put("Product_Details.List_Price",lp);
+		mapsub.put("Product_Details.Product_Name",prodname);
+		mapsub.put("Product_Details.Quantity",qty);
+		mapsub.put("Product_Details.Total",total);
+		mapsub.put("Product_Details.Discount",dsc);
+		mapsub.put("Product_Details.Tax",taxy);
+		subform.add(mapsub);
+	}
+	//===============================================================================================================
+	aggsubtot = quoteDetails.get("Sub_Total");
+	aggsubtotal = aggsubtot - additional;
+	c = aggsubtotal.toDecimal().round(2);
+	cc = c.toString().length();
+	ccc = c.toString().substring(cc - 3,cc);
+	subtot = aggsubtotal.floor();
+	subtotlength = subtot.toString().length();
+	if(aggsubtotal >= 1000)
+	{
+		separatorsub = subtot.toString().substring(subtotlength - 3,subtotlength);
+		quoteSub = subtot.toString().substring(0,subtotlength - 3).replaceAll("(?<=\d)(?=(\d\d\d)+(?!\d))",",") + "," + separatorsub + ccc;
+	}
+	else
+	{
+		quoteSub = subtot.toString() + ccc;
+	}
+	info quoteSub;
+	//===============================================================================================================
+	//separator tax
+	aggtaxy = quoteDetails.get("Tax");
+	aggtax = aggsubtotal * 0.1;
+	d = aggtax.toDecimal().round(2);
+	dd = d.toString().length();
+	ddd = d.toString().substring(dd - 3,dd);
+	taxtot = aggtax.floor();
+	taxlength = taxtot.toString().length();
+	if(aggtax >= 1000)
+	{
+		separatortax = taxtot.toString().substring(taxlength - 3,taxlength);
+		quoteTax = taxtot.toString().substring(0,taxlength - 3).replaceAll("(?<=\d)(?=(\d\d\d)+(?!\d))",",") + "," + separatortax + ddd;
+	}
+	else
+	{
+		quoteTax = taxtot.toString() + ddd;
+	}
+	info quoteTax;
+	//===============================================================================================================
+	//separator grandtotal
+	agggrandtotal = quoteDetails.get("Grand_Total");
+	aggtotal = aggsubtotal + aggtax;
+	e = aggtotal.toDecimal().round(2);
+	ee = e.toString().length();
+	eee = e.toString().substring(ee - 3,ee);
+	aggtot = aggtotal.floor();
+	aggtotlength = aggtot.toString().length();
+	if(aggtotal >= 1000)
+	{
+		separatoraggtot = aggtot.toString().substring(aggtotlength - 3,aggtotlength);
+		quoteTotal = aggtot.toString().substring(0,aggtotlength - 3).replaceAll("(?<=\d)(?=(\d\d\d)+(?!\d))",",") + "," + separatoraggtot + eee;
+	}
+	else
+	{
+		quoteTotal = aggtot.toString() + eee;
+	}
+	info quoteTotal;
+}
+//info listpro;
+//mapping field
+updateField = Map();
+updateField.put("Product_Details",listpro);
+updateField.put("Tax",aggtax);
+updateField.put("Sub_Total",aggsubtotal);
+updateField.put("Discounts",aggdisc);
+updateField.put("Adjustment",aggadjust);
+updateField.put("Grand_Total",aggtotal);
+updateField.put("Budget_From",budgetfrom1);
+updateField.put("Budget_To",budgetto1);
+updateField.put("Additional_Product_Price",price44);
+updateField.put("Additional_Product_plus_GST",addPrice);
+updateField.put("Additional_kg",qty4);
+updateField.put("Site_Description",Site_Description);
+updateField.put("Lineal_Area",Lineal_Area);
+updateField.put("QBCC_Insurance",Currency5);
+updateField.put("Days",Days);
+updateField.put("Quote_Date",quoteDates);
+updateField.put("Quotes_No",Quote_No);
+updateField.put("Situation_of_Works",Situation_of_Works);
+updateField.put("Stabilising_Relevelling",Stabilising_Relevelling);
+updateField.put("Type_of_Foundation",Type_of_Foundation);
+updateField.put("Type_of_Injection",Type_of_Injection);
+updateField.put("Geotechnical_Note",Geotechnical_Note);
+updateField.put("Service_Location",Service_Location.toString());
+updateField.put("Subsidence_Evident",Subsidence_Evident);
+updateField.put("Dates",Dates);
+updateField.put("RSJ170_Price",Currency1);
+updateField.put("RSJ170_Qty",RSJ170_Qty);
+updateField.put("Travel_Establishment",Currency2);
+updateField.put("Service_Location_Cost",Currency3);
+updateField.put("Basis_of_Submission",Basis_of_Submission);
+updateField.put("Discount",Discount);
+updateField.put("Quote_Grand_Total",quoteTotal);
+updateField.put("Quote_Subtotal",quoteSub);
+updateField.put("Quote_Tax",quoteTax);
+updateField.put("Region",Region);
+//update contacts
+updateRecord = zoho.crm.updateRecord("Contacts",id,updateField);
+info updateRecord;
+//mail merge
+writerID = "76msr503ca12c42084898ad9dc767c4b5eab5";
+mergeFields = {"data":{{"First_Name":First_Name,"Last_Name":Last_Name,"Address":Address,"Street":Street,"City":City,"State":State,"Email":Email,"Mobile":Mobile,"Quotes_No":Quote_No,"Situation_of_Works":Situation_of_Works,"Assessor":Assessor,"Additional_kg":qty4,"Additional_Product_Price":price44,"Quote_Date":quoteDates,"Sub_Total":aggsubtotal,"Grand_Total":aggtotal,"Assesor_Email":Assesor_Email,"Basis_of_Submission":Basis_of_Submission,"Lineal_Area":Lineal_Area,"Subsidence_Evident":Subsidence_Evident,"Type_of_Foundation":Type_of_Foundation,"QBCC_Insurance":Currency5,"RSJ170_Price":Currency1,"RSJ170_Qty":RSJ170_Qty,"Travel_Establishment":Currency2,"Service_Location_Cost":Currency3,"Days":Days,"Tax":aggtax,"Dates":Dates,"Type_of_Injection":Type_of_Injection,"Region":Region,"Stabilising_Relevelling":Stabilising_Relevelling,"Quote_Grand_Total":quoteTotal,"Quote_Subtotal":quoteSub,"Quote_Tax":quoteTax,"Budget_From":budgetfrom1,"Budget_To":budgetto1,"Phone":Phone,"Service_Location":Service_Location,"Geotechnical_Note":Geotechnical_Note,"Site_Description":Site_Description,"Additional_Product_plus_GST":addPrice}}};
+//"Quote_Subtotal":quotesubtotal
+//"Quote_Tax":quotetax
+//"Quote_Grand_Total":quotegrand
+info "_____________________________";
+info mergeFields;
+info "_____________________________";
+data = Map();
+data.put("output_format","docx");
+data.put("filename","Quotation_" + Last_Name);
+data.put("merge_data",mergeFields);
+mergedown = invokeurl
+[
+	url :"https://writer.zoho.com/writer/api/v1/documents/" + writerID + "/merge/download"
+	type :POST
+	parameters:data
+	connection:"writers"
+];
+info mergedown;
+attachfile = zoho.crm.attachFile("Contacts",id.tolong(),mergedown);
+info attachfile;
+return "Quotation successfully created. Thank You!";
